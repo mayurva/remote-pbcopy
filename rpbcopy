@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -e
+usage() {
+    echo 'Usage: rpbcopy -h remote_host -f file_path'
+}
+
+# Parse arguments.
+while getopts "h:f:" opt; do
+    case $opt in
+        h ) HOST="${OPTARG}";;
+        f ) FILE_PATH="${OPTARG}";;
+        * ) usage exit 1;;
+    esac
+done
+
+if [[ -z $HOST || -z $FILE_PATH ]]; then
+    echo 'Error: Must supply both arguments'
+    usage
+    exit 1
+fi
+
+ssh $HOST "cat $FILE_PATH" | pbcopy
